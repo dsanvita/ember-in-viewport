@@ -1,5 +1,4 @@
 /* eslint-disable ember/no-new-mixins, ember/no-get, ember/no-observers, ember/no-incorrect-calls-with-inline-anonymous-functions */
-import { assign } from '@ember/polyfills';
 import Mixin from '@ember/object/mixin';
 import { typeOf } from '@ember/utils';
 import { assert, debug, deprecate } from '@ember/debug';
@@ -45,7 +44,7 @@ export default Mixin.create({
     // ensure this mixin runs first, then your component can override the options
     this._super(...arguments);
 
-    let options = assign(
+    let options = Object.assign(
       {
         viewportUseRAF: canUseRAF(),
         viewportEntered: false,
@@ -55,7 +54,7 @@ export default Mixin.create({
     );
 
     // set viewportUseIntersectionObserver after merging users config to avoid errors in browsers that lack support (https://github.com/DockYard/ember-in-viewport/issues/146)
-    options = assign(options, {
+    options = Object.assign(options, {
       viewportUseIntersectionObserver: canUseIntersectionObserver(),
     });
 
@@ -71,6 +70,11 @@ export default Mixin.create({
       false,
       {
         id: 'ember-in-viewport.mixin',
+        for: 'ember-in-viewport',
+        since: {
+          available: '3.7.7',
+          enabled: '3.7.7',
+        },
         until: '4.0.0',
         url: 'https://github.com/DockYard/ember-in-viewport#readme',
       }
@@ -96,7 +100,7 @@ export default Mixin.create({
     const owner = getOwner(this);
 
     if (owner) {
-      return assign(defaultOptions, owner.lookup('config:in-viewport'));
+      return Object.assign(defaultOptions, owner.lookup('config:in-viewport'));
     }
   },
 
